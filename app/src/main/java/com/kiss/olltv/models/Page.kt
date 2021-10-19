@@ -13,7 +13,6 @@ data class Page(
     val categoryName: String,
     @SerializedName("first_now_index")
     val firstNowIndex: Int,
-    @SerializedName("hasMore")
     val hasMore: Long, // количество элементов от borderId до конца списка
     val items: List<TvShow>?, // массив элементов, которые нужно выводить в списке
     @SerializedName("items_number")

@@ -1,5 +1,6 @@
 package com.kiss.olltv.di
 
+import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.kiss.olltv.BuildConfig
@@ -19,6 +20,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 import java.util.concurrent.TimeUnit
+import java.util.logging.Logger
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -36,7 +38,11 @@ class ApiHelperModule {
                 .readTimeout(30, TimeUnit.SECONDS)
 
         return if (BuildConfig.DEBUG) {
-            val loggingInterceptor = HttpLoggingInterceptor()
+            val loggingInterceptor = HttpLoggingInterceptor(object : HttpLoggingInterceptor.Logger {
+                override fun log(message: String) {
+                    Log.d("OLL_TV_API", message)
+                }
+            })
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
             okHttpClient.addInterceptor(loggingInterceptor).build()
         } else {

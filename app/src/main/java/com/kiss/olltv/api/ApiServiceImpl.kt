@@ -5,6 +5,6 @@ import javax.inject.Inject
 
 class ApiHelperImpl @Inject constructor(private val apiService: ApiService): ApiHelper {
     override suspend fun getTvShow(imei: Long, borderId: Long, direction: Int): Page {
-        TODO("Not yet implemented")
+       return apiService.getTvShow(imei, borderId, direction)
     }
 }
