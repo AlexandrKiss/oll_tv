@@ -11,8 +11,12 @@ import com.kiss.olltv.models.TvShow
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TvShowAdapter: PagingDataAdapter<TvShow, TvShowAdapter.TvShowHolder>(TvShowDiffItemCallback) {
-    class TvShowHolder(binding: TvShowItemBinding): RecyclerView.ViewHolder(binding.root) {
+class TvShowAdapter(private val tvShowCallback: (tvShow: TvShow) -> Unit
+): PagingDataAdapter<TvShow, TvShowAdapter.TvShowHolder>(TvShowDiffItemCallback) {
+    class TvShowHolder(binding: TvShowItemBinding,
+                       private val tvShowCallback: (tvShow: TvShow) -> Unit
+    ): RecyclerView.ViewHolder(binding.root) {
+        private val root = binding.root
         private val logo = binding.logo
         private val name = binding.name
         private val time = binding.time
@@ -24,6 +28,8 @@ class TvShowAdapter: PagingDataAdapter<TvShow, TvShowAdapter.TvShowHolder>(TvSho
             if (tvShow != null) {
                 val dateFormat = SimpleDateFormat("dd.MM HH:mm", Locale.getDefault())
                 time.text = dateFormat.format(tvShow.start)
+
+                root.setOnClickListener { tvShowCallback(tvShow) }
             }
         }
     }
@@ -31,7 +37,7 @@ class TvShowAdapter: PagingDataAdapter<TvShow, TvShowAdapter.TvShowHolder>(TvSho
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TvShowHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = TvShowItemBinding.inflate(inflater, parent, false)
-        return TvShowHolder(binding)
+        return TvShowHolder(binding, tvShowCallback)
     }
 
     override fun onBindViewHolder(holder: TvShowHolder, position: Int) {
@@ -47,5 +53,4 @@ private object TvShowDiffItemCallback : DiffUtil.ItemCallback<TvShow>() {
     override fun areContentsTheSame(oldItem: TvShow, newItem: TvShow): Boolean {
         return oldItem == newItem
     }
-
 }

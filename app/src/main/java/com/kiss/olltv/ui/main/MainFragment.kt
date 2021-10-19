@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.kiss.olltv.databinding.MainFragmentBinding
 import com.kiss.olltv.ui.LoaderStateAdapter
 import com.kiss.olltv.ui.TvShowAdapter
@@ -19,7 +20,7 @@ class MainFragment: Fragment() {
     private val binding by lazy { MainFragmentBinding.inflate(layoutInflater) }
     private val viewModel: TvShowViewModel by viewModels()
 
-    private val tvShowAdapter = TvShowAdapter()
+    private lateinit var tvShowAdapter: TvShowAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -28,6 +29,7 @@ class MainFragment: Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setAdapter()
         binding.tvShowList.apply {
             adapter = tvShowAdapter
             adapter = tvShowAdapter.withLoadStateHeaderAndFooter(
@@ -41,5 +43,12 @@ class MainFragment: Fragment() {
                 tvShowAdapter.submitData(it)
             }
         })
+    }
+
+    private fun setAdapter() {
+        tvShowAdapter = TvShowAdapter { tvShow ->
+            val action = MainFragmentDirections.actionMainFragmentToTvShowFullFragment(tvShow)
+            findNavController().navigate(action)
+        }
     }
 }

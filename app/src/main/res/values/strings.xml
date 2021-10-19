@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ollTV</string>
+    <string name="empty_description">Описания нет</string>
 </resources>

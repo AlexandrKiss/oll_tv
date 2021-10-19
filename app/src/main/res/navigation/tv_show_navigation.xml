@@ -7,5 +7,17 @@
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.kiss.olltv.ui.main.MainFragment"
-        android:label="MainFragment" />
+        android:label="MainFragment" >
+        <action
+            android:id="@+id/action_mainFragment_to_tvShowFullFragment"
+            app:destination="@id/tvShowFullFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/tvShowFullFragment"
+        android:name="com.kiss.olltv.ui.main.TvShowFullFragment"
+        android:label="TvShowFullFragment" >
+        <argument
+            android:name="tv_show"
+            app:argType="com.kiss.olltv.models.TvShow" />
+    </fragment>
 </navigation>
