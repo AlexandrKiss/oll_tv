@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.kiss.olltv.databinding.MainFragmentBinding
 import com.kiss.olltv.ui.LoaderStateAdapter
@@ -46,9 +47,11 @@ class MainFragment: Fragment() {
     }
 
     private fun setAdapter() {
-        tvShowAdapter = TvShowAdapter { tvShow ->
+        tvShowAdapter = TvShowAdapter { tvShow, imageView ->
+            println(tvShow.channelName)
+            val extras = FragmentNavigatorExtras(imageView to tvShow.icon!!)
             val action = MainFragmentDirections.actionMainFragmentToTvShowFullFragment(tvShow)
-            findNavController().navigate(action)
+            findNavController().navigate(action, extras)
         }
     }
 }

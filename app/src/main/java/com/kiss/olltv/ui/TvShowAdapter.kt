@@ -2,19 +2,22 @@ package com.kiss.olltv.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.kiss.olltv.databinding.TvShowItemBinding
 import com.kiss.olltv.models.TvShow
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TvShowAdapter(private val tvShowCallback: (tvShow: TvShow) -> Unit
+class TvShowAdapter(private val tvShowCallback: (tvShow: TvShow, imageView: ImageView) -> Unit
 ): PagingDataAdapter<TvShow, TvShowAdapter.TvShowHolder>(TvShowDiffItemCallback) {
+
     class TvShowHolder(binding: TvShowItemBinding,
-                       private val tvShowCallback: (tvShow: TvShow) -> Unit
+                       private val tvShowCallback: (tvShow: TvShow, imageView: ImageView) -> Unit
     ): RecyclerView.ViewHolder(binding.root) {
         private val root = binding.root
         private val logo = binding.logo
@@ -22,14 +25,20 @@ class TvShowAdapter(private val tvShowCallback: (tvShow: TvShow) -> Unit
         private val time = binding.time
 
         fun bind(tvShow: TvShow?) {
-            Glide.with(logo).load(tvShow?.icon).into(logo)
-            name.text = tvShow?.name
 
             if (tvShow != null) {
+                logo.apply {
+                    transitionName = tvShow.icon
+                    Glide.with(this)
+                        .load(tvShow.icon)
+                        .into(this)
+                }
+                name.text = tvShow.name
+
                 val dateFormat = SimpleDateFormat("dd.MM HH:mm", Locale.getDefault())
                 time.text = dateFormat.format(tvShow.start)
 
-                root.setOnClickListener { tvShowCallback(tvShow) }
+                root.setOnClickListener { tvShowCallback(tvShow, logo) }
             }
         }
     }
